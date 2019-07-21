@@ -25,20 +25,34 @@ public class StudyRepository {
 
 
     public void insert (Entity_Category category) {
-        new insertAsyncTask(mCategoryDao).execute(category);
+        new insertCategoryAsyncTask(mCategoryDao).execute(category);
+    }
+    public void deleteCategory (Entity_Category category){
+        new deleteCategoryAsyncTask(mCategoryDao).execute(category);
     }
 
-    private static class insertAsyncTask extends AsyncTask<Entity_Category, Void, Void> {
 
-        private CategoryDao mAsyncTaskDao;
-
-        insertAsyncTask(CategoryDao dao) {
-            mAsyncTaskDao = dao;
+    private static class insertCategoryAsyncTask extends AsyncTask<Entity_Category, Void, Void> {
+        private CategoryDao categoryDao;
+        insertCategoryAsyncTask(CategoryDao dao) {
+            categoryDao = dao;
         }
-
         @Override
-        protected Void doInBackground(final Entity_Category... params) {
-            mAsyncTaskDao.insert(params[0]);
+        protected Void doInBackground(final Entity_Category... categories) {
+            categoryDao.insert(categories[0]);
+            return null;
+        }
+    }
+
+
+    private static class deleteCategoryAsyncTask extends AsyncTask<Entity_Category, Void, Void> {
+        private CategoryDao categoryDao;
+        deleteCategoryAsyncTask(CategoryDao dao) {
+            categoryDao = dao;
+        }
+        @Override
+        protected Void doInBackground(final Entity_Category... categories) {
+            categoryDao.delete(categories[0]);
             return null;
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,12 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
         notifyDataSetChanged();
     }
 
+    public Entity_Category getCategoryAt(int position){
+        return categories.get(position);
+    }
+
+
+
     @Override
     public int getItemCount() {
         if (categories!=null){
@@ -54,14 +61,23 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
             return 0;
     }
 
-    class SimpleItemViewHolder extends RecyclerView.ViewHolder{
+    class SimpleItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final TextView simpleListItemView;
+        SimpleListAdapter mAdapter;
 
         //constructor
         public SimpleItemViewHolder(View itemView) {
             super(itemView);
             simpleListItemView = itemView.findViewById(R.id.category);
         }
+        @Override
+        public void onClick(View v) {
+            // Get the position of the item that was clicked.
+            int position = getLayoutPosition();
+            //itemView.chi
+            //mAdapter.notifyDataSetChanged();
+        }
+
     }
 
 }

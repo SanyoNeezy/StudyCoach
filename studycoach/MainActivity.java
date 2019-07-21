@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,11 +52,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //First Parameter for onMove Method ( = 0, because is not used)
+        //Second Parameter swipe Directions
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                studyViewModel.deleteCategory(adapter.getCategoryAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(MainActivity.this, "Note deleted", Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewCategoryActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddCategoryActivity.class);
                 startActivityForResult(intent, NEW_CATEGORY_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -78,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             LiveData<List<Entity_Category>> categories = studyViewModel.getAllCategories();
 //            categories.getValue().size()
 
-            Entity_Category category = new Entity_Category(data.getStringExtra(NewCategoryActivity.EXTRA_REPLY), categories.getValue().size());
+            Entity_Category category = new Entity_Category(data.getStringExtra(AddCategoryActivity.EXTRA_REPLY), categories.getValue().size());
 
             studyViewModel.insert(category);
         } else {

@@ -28,7 +28,9 @@ public class StudyViewModel extends AndroidViewModel {
     public void insert (Entity_Category category){
             mRepository.insert(category);
     }
-    //@Override
-    // ToDo: public void insert (Entity_Source)
 
+
+    public void deleteCategory(Entity_Category category){
+            mRepository.deleteCategory(category);
+        }
 }
